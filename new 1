@@ -1,0 +1,15 @@
+CMD:vendercasa(playerid, params[]) {
+    new casa = user[playerid][jCasaKey], string[128];
+    if (user[playerid][jCasaKey] == INVALID_CASA_ID) return _Mensaje(playerid, 0, "2", "No tienes una casa en la ranura 1.");
+    if (_enPos(playerid, 1.5, InfoCasa[casa][cExteriorX], InfoCasa[casa][cExteriorY], InfoCasa[casa][cExteriorZ]) && user[playerid][jVirtualWorld] == InfoCasa[casa][c_VW]) {
+        if (casa != INVALID_CASA_ID && strcmp(NombreRJugador(playerid), InfoCasa[casa][cComprador], true) == 0) {
+            new sell = InfoCasa[casa][cPrecio] / 2;
+            Ganancia(playerid, sell);
+            format(string, sizeof(string), "Has vendido tu casa. Has recuperado %d$", sell);
+            _Mensaje(playerid, 2, "0", string);
+            VenderCasa(playerid, casa);
+            user[playerid][jCasaKey] = INVALID_CASA_ID;
+        } else _Mensaje(playerid, 0, "580", "No tienes una casa o no esta a tu nombre.");
+    } else _Mensaje(playerid, 0, "580", "Necesitas estar cerca su casa para venderla.");
+    return 1;
+}
